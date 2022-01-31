@@ -6,9 +6,9 @@ import React from "react";
 
 const EMOTES = {};
 class App extends React.Component {
-    constructor() {
-        super();
-        this.state = {topChats: [], url: "", width: 940, height: 865, streamer: "No Active Stream"};
+    constructor(props) {
+        super(props);
+        this.state = {topChats: [], url: "", width: 0, height: 0, streamer: "No Active Stream"};
         ComfyJS.onChat = (user, message, flags, self, extra) => {
             this.appendMessage(user, message, flags, extra);
         }
@@ -38,7 +38,7 @@ class App extends React.Component {
         const header = document.getElementById("header");
         const computedStyle = window.getComputedStyle(header);
         const iframe = { height: height - header.offsetHeight, width : width/2 - 20}
-        if (width < 415) {
+        if (width < 1285) {
             iframe.width = width - 20;
             iframe.height = height - document.getElementById("top-chat").offsetHeight - header.offsetHeight- this.getPadding(computedStyle.paddingTop,computedStyle.paddingBottom) - 25 ;
         }

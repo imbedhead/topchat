@@ -19,7 +19,7 @@ class Streamer extends React.Component {
     render() {
         return (
             <div className="d-flex" id="header">
-                <input className="form-control mr-4" id="streamer-input" onChange={this.changeHandler.bind(this)} placeholder="Enter Streamer Name"/>
+                <input className="form-control mr-4" id="streamer-input" onChange={this.changeHandler.bind(this)} placeholder="Enter Streamer"/>
                 <button className="btn btn-primary p-1" id="enter-btn" onClick={this.clickHandler.bind(this)}>Enter Chat</button>
                 <small className="px-4">{this.props.streamer}</small>
             </div>
