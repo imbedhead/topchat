@@ -174,7 +174,7 @@ class App extends React.Component {
             user: {username: user, style: {color: extra.userColor}}
         };
         if (allChat.length > 100) {
-            allChat.unshift();
+            allChat.shift();
         }
         this.setState({topChats: [...allChat, newEntry]});
 
