@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/topchat/static/css/main.f16e671f.chunk.css",
+    "main.js": "/topchat/static/js/main.c3452e6b.chunk.js",
+    "main.js.map": "/topchat/static/js/main.c3452e6b.chunk.js.map",
+    "runtime-main.js": "/topchat/static/js/runtime-main.6a5954fd.js",
+    "runtime-main.js.map": "/topchat/static/js/runtime-main.6a5954fd.js.map",
+    "static/css/2.0a9ec390.chunk.css": "/topchat/static/css/2.0a9ec390.chunk.css",
+    "static/js/2.fdbc9a97.chunk.js": "/topchat/static/js/2.fdbc9a97.chunk.js",
+    "static/js/2.fdbc9a97.chunk.js.map": "/topchat/static/js/2.fdbc9a97.chunk.js.map",
+    "static/js/3.7f4535cf.chunk.js": "/topchat/static/js/3.7f4535cf.chunk.js",
+    "static/js/3.7f4535cf.chunk.js.map": "/topchat/static/js/3.7f4535cf.chunk.js.map",
+    "index.html": "/topchat/index.html",
+    "static/css/2.0a9ec390.chunk.css.map": "/topchat/static/css/2.0a9ec390.chunk.css.map",
+    "static/css/main.f16e671f.chunk.css.map": "/topchat/static/css/main.f16e671f.chunk.css.map",
+    "static/js/2.fdbc9a97.chunk.js.LICENSE.txt": "/topchat/static/js/2.fdbc9a97.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6a5954fd.js",
+    "static/css/2.0a9ec390.chunk.css",
+    "static/js/2.fdbc9a97.chunk.js",
+    "static/css/main.f16e671f.chunk.css",
+    "static/js/main.c3452e6b.chunk.js"
+  ]
+}
