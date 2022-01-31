@@ -114,7 +114,7 @@ class App extends React.Component {
      * @param streamer string value of streamer to join
      */
     updateUrl(streamer) {
-        this.setState({url: `https://www.twitch.tv/embed/${streamer}/chat?parent=localhost&darkpopout`});
+        this.setState({url: `https://www.twitch.tv/embed/${streamer}/chat?parent=topchat.tv&darkpopout`});
     }
 
     /**
