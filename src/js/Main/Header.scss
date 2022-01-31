@@ -1,0 +1,24 @@
+
+#header {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+
+  #streamer-input {
+    width: 50%;
+    height: 2em;
+    margin-right: 1em;
+  }
+
+  #enter-btn {
+    white-space: nowrap;
+    height: 35px;
+  }
+
+}
+
+@media screen and (max-width: 767px) {
+  #header {
+    padding-top: .25rem;
+    padding-bottom: .25rem;
+  }
+}
