@@ -3,8 +3,10 @@ import './App.scss';
 import Main from "./js/Main/Main";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from "react";
+import GLOBAL_EMOTES from "./GLOBAL_EMOTES.json";
 
 const EMOTES = {};
+let currentEmotes = {};
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -13,7 +15,7 @@ class App extends React.Component {
             this.appendMessage(user, message, flags, extra);
         }
         this.currentStreamer = "";
-        window.addEventListener('resize', this.resizeHandler.bind(this))
+        window.addEventListener('resize', this.resizeHandler.bind(this));
     }
 
     componentDidMount() {
@@ -89,12 +91,14 @@ class App extends React.Component {
                         lastRetrieved: new Date().valueOf(),
                         allEmotes: massagedEmote
                     };
+                    currentEmotes = EMOTES[streamer].allEmotes;
                 },
                 error => {
                     EMOTES[streamer] = {
                         lastRetrieved: new Date().valueOf(),
                         allEmotes: []
                     }
+                    currentEmotes = {};
                 });
     }
 
@@ -117,18 +121,28 @@ class App extends React.Component {
         this.setState({url: `https://www.twitch.tv/embed/${streamer}/chat?parent=www.topchat.tv&parent=topchat.tv&darkpopout`});
     }
 
+    getEmote(name) {
+
+        if (GLOBAL_EMOTES[name]) {
+            return GLOBAL_EMOTES[name];
+        }
+        if (currentEmotes[name]) {
+            return currentEmotes[name];
+        }
+        return false;
+    }
+
     /**
      * Parse through chatter's message to look for potential emotes in any
      * @param msg chatter's message string
      * @returns {*} array of plaintext and emote objects found in message
      */
     parseForEmotes(msg) {
-        // Grab copy of cached emotes object
-        const current = EMOTES[this.currentStreamer].allEmotes;
         // Iterate through each word, returning an emote object if an emote if found, otherwise return the plaintext word
         return msg.split(" ").map(str => {
-            if (current[str]) {
-                return {name: str, urls: current[str].join(",")};
+            const emote = this.getEmote(str)
+            if (emote) {
+                return {name: str, urls: emote.join(",")};
             }
             return str;
         });
@@ -164,12 +178,16 @@ class App extends React.Component {
         if (!isElevatedUser) {
             return;
         }
+        if (user === "エネス") {
+            console.log(extra);
+        }
         const msg = `: ${userMessage}`;
         const allChat = this.state.topChats;
         const newEntry = {
             key: user + new Date().valueOf(),
             badgeList: badges,
             msg: this.parseForEmotes(msg),
+            userCardUrl: `https://www.twitch.tv/popout/${this.currentStreamer}/viewercard/${user}`,
             time: new Date(Number(extra.timestamp)).toTimeString().substr(0, 8),
             user: {username: user, style: {color: extra.userColor}}
         };
@@ -179,8 +197,6 @@ class App extends React.Component {
         this.setState({topChats: [...allChat, newEntry]});
 
     }
-
-
 
     render() {
         return (

@@ -10,6 +10,7 @@ class Chat extends React.Component {
         this.index = this.props.key;
         this.message = this.props.msg;
         this.user = this.props.user;
+        this.userCardUrl = this.props.userCardUrl;
         this.badges = this.props.badgeList ? this.props.badgeList : [];
         this.chatClass = "chat-line__message tw-relative p-0 list-group-item bg-dark";
     }
@@ -19,7 +20,7 @@ class Chat extends React.Component {
             <li className={this.chatClass} key={this.index}>
                 <span className="text-light">{this.props.time} </span>
                 <BadgeList key={`badges-list-${new Date().valueOf()}`} badges={this.badges}/>
-                <span style={this.user.style}>{this.user.username}</span>
+                <a className="username" href={this.userCardUrl} style={this.user.style} target="_blank" rel="noreferrer">{this.user.username}</a>
                 <span className="text-light">{this.message.map((msg, i) => typeof msg === "string" ?
                     <Text key={`${msg + i}-${new Date().valueOf()}`} msg={msg}/> :
                     <Emote key={`${msg + i}-${new Date().valueOf()}`} emote={msg}/>)}</span>

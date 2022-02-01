@@ -25,7 +25,7 @@ class Main extends React.Component {
                     <Col sm={6} xs={12} className="pr-0">
                         <small className="text-light">TOP CHAT</small>
                         <ul id="top-chat" className="list-group">
-                            {this.props.msgs.map(msg => <Chat key={msg.key} time={msg.time} badgeList={msg.badgeList} msg={msg.msg} user={msg.user}/>)}
+                            {this.props.msgs.map(msg => <Chat key={msg.key} time={msg.time} userCardUrl={msg.userCardUrl} badgeList={msg.badgeList} msg={msg.msg} user={msg.user}/>)}
 
                             <li style={{ float:"left", clear: "both" }}
                                  ref={(el) => { this.messagesEnd = el; }}>
