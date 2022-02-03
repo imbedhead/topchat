@@ -78,7 +78,7 @@ class App extends React.Component {
             return;
         }
         // Break this down to check for emotes for each emote source
-        return fetch(`${process.env.REACT_APP_ENV}:9000/emotes/${streamer}`);
+        return fetch(`/emotes/${streamer}`);
     }
 
     /**
