@@ -8,7 +8,7 @@ class Clip extends React.Component {
      */
     parseClipLink(link) {
         const parse = link.substr(link.indexOf(".tv/") + 4);
-        return `https://clips.twitch.tv/embed?clip=${parse}&parent=www.topchat.tv&parent=topchat.tv`;
+        return `https://clips.twitch.tv/embed?clip=${parse}&parent=www.topchattv.herokuapp.com&parent=topchattv.herokuapp.com`;
     }
 
     render() {

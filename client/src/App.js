@@ -103,7 +103,7 @@ class App extends React.Component {
      * @param streamer string value of streamer to join
      */
     updateUrl(streamer) {
-        this.setState({url: `https://www.twitch.tv/embed/${streamer}/chat?parent=www.topchat.tv&parent=topchat.tv&darkpopout`});
+        this.setState({url: `https://www.twitch.tv/embed/${streamer}/chat?parent=www.topchattv.herokuapp.com&parent=topchattv.herokuapp.com&darkpopout`});
     }
 
     getEmote(name) {
