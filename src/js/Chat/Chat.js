@@ -3,6 +3,7 @@ import BadgeList from "./BadgeList";
 import "./Chat.scss"
 import Emote from "./Messages/Emote";
 import Text from "./Messages/Text";
+import {Badge} from "react-bootstrap";
 
 class Chat extends React.Component {
     constructor(props) {
@@ -18,7 +19,7 @@ class Chat extends React.Component {
     render() {
         return (
             <li className={this.chatClass} key={this.index}>
-                <span className="text-light">{this.props.time} </span>
+                <Badge bg="dark">{this.props.time} </Badge>
                 <BadgeList key={`badges-list-${new Date().valueOf()}`} badges={this.badges}/>
                 <a className="username" href={this.userCardUrl} style={this.user.style} target="_blank" rel="noreferrer">{this.user.username}</a>
                 <span className="text-light">{this.message.map((msg, i) => typeof msg === "string" ?

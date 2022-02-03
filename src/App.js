@@ -40,7 +40,7 @@ class App extends React.Component {
         const header = document.getElementById("header");
         const computedStyle = window.getComputedStyle(header);
         const iframe = { height: height - header.offsetHeight, width : width/2 - 20}
-        if (width < 1285) {
+        if (width < 992) {
             iframe.width = width - 20;
             iframe.height = height - document.getElementById("top-chat").offsetHeight - header.offsetHeight- this.getPadding(computedStyle.paddingTop,computedStyle.paddingBottom) - 25 ;
         }
@@ -62,14 +62,14 @@ class App extends React.Component {
             this.setState({streamer: this.currentStreamer, topChats: []});
             ComfyJS.Init(streamer);
             this.updateUrl(streamer)
-            this.getEmotes();
+            this.getEmotes().then(r => r.json().then(emotes => currentEmotes = emotes));
         }
     }
 
     /**
      * Retrieve the channel emotes for chat (Twitch, BTTV, 7TTV, FFZ)
      */
-    getEmotes() {
+    async getEmotes() {
         const streamer = this.currentStreamer;
         // If we cached the current streamers emotes, use the cached version instead of fetching
         if (EMOTES[streamer]) {
@@ -77,29 +77,8 @@ class App extends React.Component {
             // TODO: Add logic to check and refetch after x minutes
             return;
         }
-        fetch(`https://emotes.adamcy.pl/v1/channel/${streamer}/emotes/all`)
-            .then(response => response.json())
-            .then(json => {
-                if (json.error) {
-                    this.setState({streamer: `Could not find user ${streamer}, try again.`, url: ""});
-                    return;
-                }
-                    // Parse response into structure we use
-                    let massagedEmote = {};
-                    json.forEach(emote => massagedEmote[emote.code] = emote.urls.map(link => `${link.url} ${link.size}`));
-                    EMOTES[streamer] = {
-                        lastRetrieved: new Date().valueOf(),
-                        allEmotes: massagedEmote
-                    };
-                    currentEmotes = EMOTES[streamer].allEmotes;
-                },
-                error => {
-                    EMOTES[streamer] = {
-                        lastRetrieved: new Date().valueOf(),
-                        allEmotes: []
-                    }
-                    currentEmotes = {};
-                });
+        // Break this down to check for emotes for each emote source
+        return fetch(`/emotes/${streamer}`);
     }
 
     /**
@@ -177,9 +156,6 @@ class App extends React.Component {
         }
         if (!isElevatedUser) {
             return;
-        }
-        if (user === "エネス") {
-            console.log(extra);
         }
         const msg = `: ${userMessage}`;
         const allChat = this.state.topChats;

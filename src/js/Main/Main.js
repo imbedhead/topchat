@@ -22,7 +22,7 @@ class Main extends React.Component {
             <Container fluid>
                 <Streamer onClickHandler={this.props.streamerClickHandler} streamer={this.props.streamer}/>
                 <Row>
-                    <Col sm={6} xs={12} className="pr-0">
+                    <Col lg={6} md={12} className="pr-0">
                         <small className="text-light">TOP CHAT</small>
                         <ul id="top-chat" className="list-group">
                             {this.props.msgs.map(msg => <Chat key={msg.key} time={msg.time} userCardUrl={msg.userCardUrl} badgeList={msg.badgeList} msg={msg.msg} user={msg.user}/>)}
@@ -32,7 +32,7 @@ class Main extends React.Component {
                             </li>
                         </ul>
                     </Col>
-                    <Col sm={6} xs={12} className="pl-0">
+                    <Col lg={6} md={12} className="pl-0">
                         <iframe id="live-chat" src={this.props.url}
                                 width={this.props.width}
                                 height={this.props.height}

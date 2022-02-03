@@ -1,6 +1,6 @@
 
 #top-chat {
-  height: 85vh;
+  height: 95vh;
   overflow-y: auto;
 
   li {
@@ -11,6 +11,7 @@
   }
 }
 
+/*
 
 
 @media screen and (max-width: 897px) {
@@ -18,15 +19,16 @@
     height: 74vh;
   }
 }
-
 @media screen and (max-width: 767px) {
   #top-chat {
     height: 80vh;
   }
 }
 
+*/
 
-@media screen and (max-width: 721px) {
+
+@media screen and (max-width: 991px) {
   #top-chat {
     height: 35vh;
   }
