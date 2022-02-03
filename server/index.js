@@ -1,9 +1,14 @@
 const express = require("express");
 const axios = require("axios");
+const { createProxyMiddleware } = require('http-proxy-middleware');
 
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT || 5000;
 
 const app = express();
+const cors = require("cors")
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 const EMOTES = {};
 const ELAPSED_CACHE = 1000 * 60 * 15;
@@ -12,7 +17,7 @@ function isExpired(emoteSet) {
     return new Date().valueOf() - emoteSet.lastRetrieved >= ELAPSED_CACHE;
 }
 
-app.get("/emotes/:streamer", async (req, res) => {
+app.get("/api/emotes/:streamer", async (req, res) => {
     // Convert entered streamer name to lower case to prevent duplicate storages in cache
     const streamer = req.params.streamer.toLowerCase();
     let emoteSet = EMOTES[streamer];
@@ -45,3 +50,5 @@ app.get("/emotes/:streamer", async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 })
+
+module.exports = app;

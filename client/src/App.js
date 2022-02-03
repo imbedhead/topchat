@@ -78,7 +78,13 @@ class App extends React.Component {
             return;
         }
         // Break this down to check for emotes for each emote source
-        return fetch(`/emotes/${streamer}`);
+        return fetch(`http://localhost:5000/api/emotes/${streamer}`, {
+            headers : {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+
+        })
     }
 
     /**
