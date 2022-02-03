@@ -50,5 +50,5 @@
     "tmi.js": "^1.8.5"
   },
   "homepage": "https://www.topchat.tv/",
-  "proxy": "https://www.topchat.tv:3001"
+  "proxy": "https://www.topchat.tv:9000"
 }
