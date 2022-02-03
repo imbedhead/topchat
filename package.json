@@ -15,12 +15,9 @@
     "web-vitals": "^2.1.3"
   },
   "scripts": {
-    "init-server": "node server/index.js",
-    "init-ui": "react-scripts start",
-    "start": "start npm run init-ui && start npm run init-server",
+    "start": "react-scripts start",
     "predeploy": "npm run build",
     "build": "react-scripts build",
-    "deploy": "gh-pages -d build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
