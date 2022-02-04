@@ -1,6 +1,5 @@
 const express = require("express");
 const axios = require("axios");
-const { createProxyMiddleware } = require('http-proxy-middleware');
 
 const PORT = process.env.PORT || 5000;
 
