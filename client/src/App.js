@@ -3,7 +3,7 @@ import './App.scss';
 import Main from "./js/Main/Main";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from "react";
-import GLOBAL_EMOTES from "./GLOBAL_EMOTES.json";
+import GLOBAL_EMOTES from "./GLOBAL_EMOTES.json"
 
 const EMOTES = {};
 let currentEmotes = {};
@@ -42,7 +42,7 @@ class App extends React.Component {
         const iframe = { height: height - header.offsetHeight, width : width/2 - 20}
         if (width < 992) {
             iframe.width = width - 20;
-            iframe.height = height - document.getElementById("top-chat").offsetHeight - header.offsetHeight- this.getPadding(computedStyle.paddingTop,computedStyle.paddingBottom) - 25 ;
+            iframe.height = 500 ;
         }
         this.setState(iframe);
     }
@@ -78,7 +78,7 @@ class App extends React.Component {
             return;
         }
         // Break this down to check for emotes for each emote source
-        return fetch(`http://localhost:5000/api/emotes/${streamer}`, {
+        return fetch(`/api/emotes/${streamer}`, {
             headers : {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'

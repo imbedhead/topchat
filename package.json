@@ -4,7 +4,8 @@
   "description": "",
   "scripts": {
     "start": "node server",
-    "build": "cd client/ && npm install && npm run build"
+    "build": "cd client/ && npm install && npm run build",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install npm && run build"
   },
   "cacheDirectories": [
     "node_modules",
@@ -13,7 +14,6 @@
   "dependencies": {
     "axios": "^0.25.0",
     "cors": "^2.8.5",
-    "express": "^4.17.2",
-    "http-proxy-middleware": "^2.0.2"
+    "express": "^4.17.2"
   }
 }
