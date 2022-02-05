@@ -6,6 +6,21 @@ import React from "react";
 import GLOBAL_EMOTES from "./GLOBAL_EMOTES.json"
 
 let currentEmotes = {};
+const EMOTE_URL = "https://static-cdn.jtvnw.net/emoticons/v2/$EMOTE_ID/default/dark/$EMOTE_SIZE";
+const EMOTE_SIZE = [
+    {
+        size: "1x",
+        urlSnippet: "1.0"
+    },
+    {
+        size: "2x",
+        urlSnippet: "2.0"
+    },
+    {
+        size: "4x",
+        urlSnippet: "3.0"
+    }
+];
 
 class App extends React.Component {
     constructor(props) {
@@ -14,6 +29,25 @@ class App extends React.Component {
         ComfyJS.onChat = (user, message, flags, self, extra) => this.appendMessage(user, message, flags, extra);
         this.currentStreamer = "";
         window.addEventListener('resize', this.resizeHandler.bind(this));
+    }
+
+    buildEmoteObject(id, name) {
+        // Add the current emote if it doesn't already exist
+        if (!currentEmotes[name]) {
+            currentEmotes[name] = EMOTE_SIZE.map(url => `${EMOTE_URL.replace("$EMOTE_ID", id).replace("$EMOTE_SIZE", url.urlSnippet)} ${url.size}`);
+        }
+
+    }
+
+    getTwitchEmotes(msg, emotes) {
+        for (const key in emotes) {
+            if (emotes.hasOwnProperty(key)) {
+                const emote = emotes[key][0];
+                const [start, end] = emote.split("-");
+                const emoteName = msg.substring(+start, +end + 1);
+                this.buildEmoteObject(key, emoteName);
+            }
+        }
     }
 
     componentDidMount() {
@@ -150,17 +184,16 @@ class App extends React.Component {
      * @returns {string|*}
      */
     getColor(color) {
-        const [r,g,b] = color.replace(/[rbg]|[()]/gi,"").split(", ");
+        const [r, g, b] = color.replace(/[rbg]|[()]/gi, "").split(", ");
         const hsp = Math.sqrt(
             0.299 * (r * r) +
             0.587 * (g * g) +
             0.114 * (b * b)
         );
-        if (hsp<127.5) {
+        if (hsp < 127.5) {
 
             return "rgb(242, 240, 237)";
-        }
-        else {
+        } else {
 
             return color;
         }
@@ -174,46 +207,61 @@ class App extends React.Component {
      * @param extra
      */
     appendMessage(user, message, flags, extra) {
-        const badges = [];
-        let isElevatedUser = false;
-        let userMessage = message;
-        if ((extra.userBadges && extra.userBadges.staff)) {
-            badges.push({key: "staff" + new Date().valueOf(), type: "staff", name: "Staff"});
-            isElevatedUser = true;
-        }
-        if (flags.broadcaster) {
-            badges.push({key: "broadcaster" + new Date().valueOf(), type: "broadcaster", name: "Broadcaster"});
-            isElevatedUser = true;
-        }
-        if (flags.mod) {
-            badges.push({key: "mod" + new Date().valueOf(), type: "mod", name: "Moderator"});
-            isElevatedUser = true;
-        }
-        if (flags.vip) {
-            badges.push({key: "vip" + new Date().valueOf(), type: "vip", name: "VIP"});
-            isElevatedUser = true;
-        }
-        if ((extra.userBadges && extra.userBadges.partner)) {
-            badges.push({key: "partner" + new Date().valueOf(), type: "partner", name: "Partner"});
-            isElevatedUser = true;
-        }
-        if (!isElevatedUser) {
+        this.getTwitchEmotes(message, extra.messageEmotes);
+        const badges = this.getBadges(extra, flags);
+        if (!badges.length) {
             return;
         }
-        const msg = `: ${userMessage}`;
         const allChat = this.state.topChats;
-        const newEntry = {
-            key: user + new Date().valueOf(),
-            badgeList: badges,
-            msg: this.parseForEmotes(msg),
-            userCardUrl: `https://www.twitch.tv/popout/${this.currentStreamer}/viewercard/${user}`,
-            time: new Date(Number(extra.timestamp)).toTimeString().substr(0, 8),
-            user: {username: this.getUsername(extra), style: {color: this.getColor(extra.userColor)}}
-        };
+        const newEntry = this.buildNewMessageObject(user, badges, message, extra);
         if (allChat.length > 100) {
             allChat.shift();
         }
         this.setState({topChats: [...allChat, newEntry]});
+    }
+
+    /**
+     * Build user object with username and color
+     */
+    getUserObject(extra) {
+        return {username: this.getUsername(extra), style: {color: this.getColor(extra.userColor)}}
+    }
+
+    /**
+     * Create object used to display message to UI
+     */
+    buildNewMessageObject(user, badges, message, extra) {
+        return {
+            key: user + new Date().valueOf(),
+            badgeList: badges,
+            msg: this.parseForEmotes(message),
+            userCardUrl: `https://www.twitch.tv/popout/${this.currentStreamer}/viewercard/${user}`,
+            time: new Date(Number(extra.timestamp)).toTimeString().substr(0, 8),
+            user: this.getUserObject(extra)
+        };
+    }
+
+    /**
+     * Get chat badges, if any
+     */
+    getBadges(extra, flags) {
+        const badges = [];
+        if ((extra.userBadges && extra.userBadges.staff)) {
+            badges.push({key: "staff" + new Date().valueOf(), type: "staff", name: "Staff"});
+        }
+        if (flags.broadcaster) {
+            badges.push({key: "broadcaster" + new Date().valueOf(), type: "broadcaster", name: "Broadcaster"});
+        }
+        if (flags.mod) {
+            badges.push({key: "mod" + new Date().valueOf(), type: "mod", name: "Moderator"});
+        }
+        if (flags.vip) {
+            badges.push({key: "vip" + new Date().valueOf(), type: "vip", name: "VIP"});
+        }
+        if ((extra.userBadges && extra.userBadges.partner)) {
+            badges.push({key: "partner" + new Date().valueOf(), type: "partner", name: "Partner"});
+        }
+        return badges;
     }
 
     render() {

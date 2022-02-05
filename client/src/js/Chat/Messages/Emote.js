@@ -14,7 +14,7 @@ class Emote extends React.Component {
 
     render() {
         return (
-            <span>
+            <span className="mx-1">
                 <OverlayTrigger
                     key={`top-${new Date().valueOf()}`}
                     placement="top"

@@ -22,7 +22,7 @@ class Chat extends React.Component {
                 <Badge bg="dark">{this.props.time} </Badge>
                 <BadgeList key={`badges-list-${new Date().valueOf()}`} badges={this.badges}/>
                 <a className="username" href={this.userCardUrl} style={this.user.style} target="_blank" rel="noreferrer">{this.user.username}</a>
-                <span className="text-light">{this.message.map((msg, i) => typeof msg === "string" ?
+                <span className="text-light">: {this.message.map((msg, i) => typeof msg === "string" ?
                     <Text key={`${msg + i}-${new Date().valueOf()}`} msg={msg}/> :
                     <Emote key={`${msg + i}-${new Date().valueOf()}`} emote={msg}/>)}</span>
             </li>
