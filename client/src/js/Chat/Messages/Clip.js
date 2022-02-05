@@ -16,8 +16,7 @@ class Clip extends React.Component {
             <div key={`clip-${new Date().valueOf()}`}>
                 <iframe src={this.parseClipLink(this.props.url)}
                         allowFullScreen="true"
-                        title="Twitch Clip"
-                />
+                        title="Twitch Clip"/>
             </div>
         );
     }

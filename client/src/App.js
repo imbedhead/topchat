@@ -5,15 +5,13 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from "react";
 import GLOBAL_EMOTES from "./GLOBAL_EMOTES.json"
 
-const EMOTES = {};
 let currentEmotes = {};
+
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {topChats: [], url: "", width: 0, height: 0, streamer: "No Active Stream"};
-        ComfyJS.onChat = (user, message, flags, self, extra) => {
-            this.appendMessage(user, message, flags, extra);
-        }
+        ComfyJS.onChat = (user, message, flags, self, extra) => this.appendMessage(user, message, flags, extra);
         this.currentStreamer = "";
         window.addEventListener('resize', this.resizeHandler.bind(this));
     }
@@ -26,8 +24,8 @@ class App extends React.Component {
      * Gets padding for header section
      */
     getPadding(top, bottom) {
-        const parsedTop = Number(top.replace("px",""));
-        const parsedBottom = Number(bottom.replace("px",""));
+        const parsedTop = Number(top.replace("px", ""));
+        const parsedBottom = Number(bottom.replace("px", ""));
         return parsedTop + parsedBottom;
     }
 
@@ -38,11 +36,10 @@ class App extends React.Component {
         const height = document.documentElement.clientHeight;
         const width = document.documentElement.clientWidth;
         const header = document.getElementById("header");
-        const computedStyle = window.getComputedStyle(header);
-        const iframe = { height: height - header.offsetHeight, width : width/2 - 20}
+        const iframe = {height: height - header.offsetHeight, width: width / 2 - 20}
         if (width < 992) {
             iframe.width = width - 20;
-            iframe.height = 500 ;
+            iframe.height = 500;
         }
         this.setState(iframe);
     }
@@ -71,20 +68,12 @@ class App extends React.Component {
      */
     async getEmotes() {
         const streamer = this.currentStreamer;
-        // If we cached the current streamers emotes, use the cached version instead of fetching
-        if (EMOTES[streamer]) {
-            // We already have the emotes, no need to refetch
-            // TODO: Add logic to check and refetch after x minutes
-            return;
-        }
-        // Break this down to check for emotes for each emote source
         return fetch(`/api/emotes/${streamer}`, {
-            headers : {
+            headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             }
-
-        })
+        });
     }
 
     /**
@@ -92,6 +81,7 @@ class App extends React.Component {
      * @param streamer string value of streamer
      */
     streamerClickHandler(streamer) {
+        // Break out if input is empty
         if (!streamer) {
             return;
         }
@@ -106,14 +96,21 @@ class App extends React.Component {
         this.setState({url: `https://www.twitch.tv/embed/${streamer}/chat?parent=www.topchattv.herokuapp.com&parent=topchattv.herokuapp.com&darkpopout`});
     }
 
+    /**
+     * Get emote from string name
+     * @param name string value of emote
+     * @returns {boolean|*} false if not found, emote object otherwise
+     */
     getEmote(name) {
-
+        // Check if given emote string is a global emote
         if (GLOBAL_EMOTES[name]) {
             return GLOBAL_EMOTES[name];
         }
+        // Check if given emote string is a channel-specific emote instead
         if (currentEmotes[name]) {
             return currentEmotes[name];
         }
+        // Current string is not an emote
         return false;
     }
 
@@ -126,11 +123,47 @@ class App extends React.Component {
         // Iterate through each word, returning an emote object if an emote if found, otherwise return the plaintext word
         return msg.split(" ").map(str => {
             const emote = this.getEmote(str)
+            // If current word is an emote, convert it to an object
             if (emote) {
                 return {name: str, urls: emote.join(",")};
             }
+            // Current word is plaintext, return it as-is
             return str;
         });
+    }
+
+    /**
+     * Check if the given user has non-english characters and display both names if found
+     * @param extra Comfy.js object of extra flags for message
+     * @returns {string|*} display name string
+     */
+    getUsername(extra) {
+        if (extra.displayName.toLowerCase() === extra.username.toLowerCase()) {
+            return extra.displayName;
+        }
+        return `${extra.displayName} (${extra.username})`;
+    }
+
+    /**
+     * Check if user color is "dark", setting it to a light color instead if it is
+     * @param color rbg color string
+     * @returns {string|*}
+     */
+    getColor(color) {
+        const [r,g,b] = color.replace(/[rbg]|[()]/gi,"").split(", ");
+        const hsp = Math.sqrt(
+            0.299 * (r * r) +
+            0.587 * (g * g) +
+            0.114 * (b * b)
+        );
+        if (hsp<127.5) {
+
+            return "rgb(242, 240, 237)";
+        }
+        else {
+
+            return color;
+        }
     }
 
     /**
@@ -144,6 +177,10 @@ class App extends React.Component {
         const badges = [];
         let isElevatedUser = false;
         let userMessage = message;
+        if ((extra.userBadges && extra.userBadges.staff)) {
+            badges.push({key: "staff" + new Date().valueOf(), type: "staff", name: "Staff"});
+            isElevatedUser = true;
+        }
         if (flags.broadcaster) {
             badges.push({key: "broadcaster" + new Date().valueOf(), type: "broadcaster", name: "Broadcaster"});
             isElevatedUser = true;
@@ -171,13 +208,12 @@ class App extends React.Component {
             msg: this.parseForEmotes(msg),
             userCardUrl: `https://www.twitch.tv/popout/${this.currentStreamer}/viewercard/${user}`,
             time: new Date(Number(extra.timestamp)).toTimeString().substr(0, 8),
-            user: {username: user, style: {color: extra.userColor}}
+            user: {username: this.getUsername(extra), style: {color: this.getColor(extra.userColor)}}
         };
         if (allChat.length > 100) {
             allChat.shift();
         }
         this.setState({topChats: [...allChat, newEntry]});
-
     }
 
     render() {
