@@ -13,10 +13,11 @@ class App extends React.Component {
         this.state = {topChats: [], url: "", width: 0, height: 0, streamer: "No Active Stream"};
         ComfyJS.onChat = (user, message, flags, self, extra) => this.appendMessage(user, message, flags, extra);
         this.currentStreamer = "";
+        window.addEventListener('resize', this.resizeHandler.bind(this));
     }
 
     componentDidMount() {
-        window.addEventListener('resize', this.resizeHandler.bind(this));
+        this.resizeHandler();
     }
 
     /**
@@ -35,7 +36,7 @@ class App extends React.Component {
         const height = document.documentElement.clientHeight;
         const width = document.documentElement.clientWidth;
         const header = document.getElementById("header");
-        const iframe = {height: height - header.offsetHeight, width: width / 2 - 20}
+        const iframe = {height: height - header.offsetHeight - 10, width: width / 2 - 25}
         if (width < 992) {
             iframe.width = width - 20;
             iframe.height = 500;
@@ -49,7 +50,7 @@ class App extends React.Component {
      */
     joinStream(streamer) {
         // Only attempt to connect if given a new streamer
-        if (streamer !== this.currentStreamer) {
+        if (streamer.toLowerCase() !== this.currentStreamer.toLowerCase()) {
             // Disconnect from the previous chat if we have a connection already
             if (this.currentStreamer) {
                 ComfyJS.Disconnect();

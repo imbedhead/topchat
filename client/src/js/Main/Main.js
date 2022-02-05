@@ -3,12 +3,29 @@ import Chat from "../Chat/Chat";
 import Streamer from "./Streamer";
 import {Col, Container, Row} from "react-bootstrap";
 
+let needsScroll = false;
+let list;
+let lastStreamer = "";
 class Main extends React.Component {
-    scrollToBottom = () => {
-        this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+    scrollNeeded() {
+        // If we are switch streamers, the list will be empted and we won't need to scroll yet
+        if (lastStreamer.toLowerCase() !== this.props.streamer.toLowerCase()) {
+            lastStreamer = this.props.streamer;
+            needsScroll = false;
+        } else if (!needsScroll) {
+            // If we don't already need to scroll, check if we will need to now
+            needsScroll = list.offsetHeight < [...list.children].reduce((prev, curr) => prev + curr.offsetHeight, 0);
+        }
+        return needsScroll;
+    }
+    scrollToBottom(){
+        if (this.scrollNeeded()) {
+            this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+        }
     }
 
     componentDidMount() {
+        list = document.getElementById("top-chat");
         this.scrollToBottom();
     }
 

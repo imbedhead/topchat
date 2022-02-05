@@ -1,35 +1,19 @@
-
 #top-chat {
   height: 90vh;
   overflow-y: auto;
 
   li {
     text-align: left;
+
     a.username {
       text-decoration: none;
     }
   }
 }
 
-/*
-
-
-@media screen and (max-width: 897px) {
-  #top-chat {
-    height: 74vh;
-  }
-}
-@media screen and (max-width: 767px) {
-  #top-chat {
-    height: 80vh;
-  }
-}
-
-*/
-
 
 @media screen and (max-width: 991px) {
   #top-chat {
-    height: 35vh;
+    height: 50vh;
   }
 }
