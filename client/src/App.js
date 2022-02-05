@@ -13,11 +13,10 @@ class App extends React.Component {
         this.state = {topChats: [], url: "", width: 0, height: 0, streamer: "No Active Stream"};
         ComfyJS.onChat = (user, message, flags, self, extra) => this.appendMessage(user, message, flags, extra);
         this.currentStreamer = "";
-        window.addEventListener('resize', this.resizeHandler.bind(this));
     }
 
     componentDidMount() {
-        this.resizeHandler();
+        window.addEventListener('resize', this.resizeHandler.bind(this));
     }
 
     /**
