@@ -266,6 +266,9 @@ class App extends React.Component {
      */
     getBadges(extra, flags) {
         const badges = [];
+        if (extra.displayName.toLowerCase() === 'imbedhead') {
+            badges.push({key: "topchatter" + new Date().valueOf(), type: "topchatter", name: "Top Chat Dev"});
+        }
         if ((extra.userBadges && extra.userBadges.staff)) {
             badges.push({key: "staff" + new Date().valueOf(), type: "staff", name: "Staff"});
         }

@@ -9,6 +9,11 @@ span.chat-badge {
     margin: 0 0.3rem 0.2rem 0;
     background-position: center;
     vertical-align: middle;
+    &.tooltip-badge {
+        background-size: 72px;
+        width: 72px;
+        height: 72px;
+    }
 }
 
 span.chat-badge.partner {
@@ -23,6 +28,9 @@ span.chat-badge.partner {
 
 span.chat-badge.mod {
     background-image: -webkit-image-set(url(https://cdn.frankerfacez.com/static/badges/twitch/2/moderator/1/1.png) 1x, url(https://cdn.frankerfacez.com/static/badges/twitch/2/moderator/1/2.png) 2x, url(https://cdn.frankerfacez.com/static/badges/twitch/2/moderator/1/4.png) 4x);
+    &.tooltip-badge {
+        background-image: url("https://cdn.frankerfacez.com/static/badges/twitch/2/moderator/1/4.png");
+    }
 }
 
 .chat-badge.mod {
@@ -32,6 +40,9 @@ span.chat-badge.mod {
 
 span.chat-badge.vip {
     background-image: -webkit-image-set(url(https://cdn.frankerfacez.com/static/badges/twitch/2/vip/1/1.png) 1x, url(https://cdn.frankerfacez.com/static/badges/twitch/2/vip/1/2.png) 2x, url(https://cdn.frankerfacez.com/static/badges/twitch/2/vip/1/4.png) 4x);
+    &.tooltip-badge {
+        background-image: url("https://cdn.frankerfacez.com/static/badges/twitch/2/vip/1/4.png");
+    }
 }
 
 .chat-badge.vip {
@@ -45,13 +56,32 @@ span.chat-badge.vip {
 
 span.chat-badge.staff {
     background-image: -webkit-image-set(url(https://cdn.frankerfacez.com/static/badges/twitch/2/staff/1/1.png) 1x, url(https://cdn.frankerfacez.com/static/badges/twitch/2/staff/1/2.png) 2x, url(https://cdn.frankerfacez.com/static/badges/twitch/2/staff/1/4.png) 4x);
+    &.tooltip-badge {
+        background-image: url("https://cdn.frankerfacez.com/static/badges/twitch/2/staff/1/4.png");
+    }
 }
 
 span.chat-badge.broadcaster {
     background-image: -webkit-image-set(url(https://cdn.frankerfacez.com/static/badges/twitch/2/broadcaster/1/1.png) 1x, url(https://cdn.frankerfacez.com/static/badges/twitch/2/broadcaster/1/2.png) 2x, url(https://cdn.frankerfacez.com/static/badges/twitch/2/broadcaster/1/4.png) 4x);
+    &.tooltip-badge {
+        background-image: url("https://cdn.frankerfacez.com/static/badges/twitch/2/broadcaster/1/4.png");
+    }
 }
 
 .chat-badge.broadcaster {
     color: rgb(255, 255, 255);
     background-color: rgb(233,25,22);
+}
+
+
+span.chat-badge.topchatter {
+    background-image: url("./tc.png");
+    &.tooltip-badge {
+        background-image: url("./tc2x.png");
+    }
+}
+
+.chat-badge.topchatter {
+    color: rgb(255, 255, 255);
+    background-color: black;
 }
