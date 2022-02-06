@@ -1,46 +1,35 @@
 import React from "react";
-import './Header.scss';
-import {Badge} from "react-bootstrap";
+import './Streamer.scss';
+import {Spinner} from "react-bootstrap";
 
 class Streamer extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {streamerInput : ""}
-    }
-
-    changeHandler(e) {
-        this.setState({streamerInput : e.target.value});
-    }
-
-    keyPressHandler(e) {
-        if (e.charCode === 13) {
-            this.clickHandler();
-        }
-    }
-
-    clickHandler() {
-        this.props.onClickHandler(this.state.streamerInput);
-    }
 
     showActiveConnection() {
-        if (!this.props.streamer || this.props.streamer === "No Active Stream") {
-            return <Badge id="streamer-name" bg="dark">{this.props.streamer}</Badge>
+        if (this.props.data.displayName === "No Connection") {
+            return <div className="d-flex" id="streamer-data">
+                {this.props.data.displayName}
+            </div>
         }
-        if (this.props.streamer.includes(" ")) {
-            return <Badge id="streamer-name" bg="danger">{this.props.streamer}</Badge>
+        if (this.props.data.invalid) {
+            return <div className="d-flex streamer-not-found" id="streamer-data">
+                {this.props.data.displayName}
+            </div>
         }
-        return <Badge id="streamer-name" bg="success">{this.props.streamer}</Badge>;
+        if (this.props.data.isLoading) {
+            return <Spinner animation="border" variant="primary" />;
+        }
+        return <div className="connected d-flex" id="streamer-data">
+            <img src={this.props.data.avatar} alt="Streamer Avatar"/>
+            <span className="mx-1">{this.props.data.displayName}</span>
+        </div>;
     }
 
 
     render() {
         return (
-            <div className="d-flex" id="header">
-                <input className="form-control mr-4" id="streamer-input" onKeyPress={this.keyPressHandler.bind(this)} onChange={this.changeHandler.bind(this)} placeholder="Enter Streamer"/>
-                <button className="btn btn-primary p-1" id="enter-btn" onClick={this.clickHandler.bind(this)}>Enter Chat</button>
-                {this.showActiveConnection()}
-            </div>
+            <div className="ml-auto">{this.showActiveConnection()}</div>
         );
     }
 }
+
 export default Streamer;

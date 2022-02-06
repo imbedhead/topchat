@@ -25,7 +25,7 @@ const EMOTE_SIZE = [
 class App extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {topChats: [], url: "", width: 0, height: 0, streamer: "No Active Stream"};
+        this.state = {topChats: [], url: "", width: 0, height: 0, streamer: {displayName: "No Connection", avatar: ""}};
         ComfyJS.onChat = (user, message, flags, self, extra) => this.appendMessage(user, message, flags, extra);
         this.currentStreamer = "";
         window.addEventListener('resize', this.resizeHandler.bind(this));
@@ -82,7 +82,7 @@ class App extends React.Component {
      * Joins given streamer's chat
      * @param streamer string value of streamer
      */
-    joinStream(streamer) {
+    async joinStream(streamer) {
         // Only attempt to connect if given a new streamer
         if (streamer.toLowerCase() !== this.currentStreamer.toLowerCase()) {
             // Disconnect from the previous chat if we have a connection already
@@ -90,10 +90,17 @@ class App extends React.Component {
                 ComfyJS.Disconnect();
             }
             this.currentStreamer = streamer;
-            this.setState({streamer: this.currentStreamer, topChats: []});
+            this.setState({streamer: {displayName: "", isLoading:true}});
+            const streamerData = await this.getStreamerData(streamer);
+            this.setState({streamer: streamerData, topChats: []});
+            if (this.state.streamer.invalid) {
+                this.currentStreamer = "";
+                this.clearEmbedUrl();
+                return;
+            }
             ComfyJS.Init(streamer);
             this.updateUrl(streamer)
-            this.getEmotes().then(r => r.json().then(emotes => currentEmotes = emotes));
+            await this.getEmotes();
         }
     }
 
@@ -107,7 +114,16 @@ class App extends React.Component {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             }
-        });
+        }).then(r => r.json().then(emotes => currentEmotes = emotes));
+    }
+
+    async getStreamerData(streamer) {
+        return fetch(`/api/streamers/${streamer}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then(r => r.json());
     }
 
     /**
@@ -120,6 +136,10 @@ class App extends React.Component {
             return;
         }
         this.joinStream(streamer);
+    }
+
+    clearEmbedUrl() {
+        this.setState({url: ""});
     }
 
     /**

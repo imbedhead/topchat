@@ -1,7 +1,7 @@
 import React from "react";
 import Chat from "../Chat/Chat";
-import Streamer from "./Streamer";
 import {Col, Container, Row} from "react-bootstrap";
+import Header from "./Header";
 
 let needsScroll = false;
 let list;
@@ -9,8 +9,8 @@ let lastStreamer = "";
 class Main extends React.Component {
     scrollNeeded() {
         // If we are switch streamers, the list will be empted and we won't need to scroll yet
-        if (lastStreamer.toLowerCase() !== this.props.streamer.toLowerCase()) {
-            lastStreamer = this.props.streamer;
+        if (lastStreamer.toLowerCase() !== this.props.streamer.displayName.toLowerCase()) {
+            lastStreamer = this.props.streamer.displayName;
             needsScroll = false;
         } else if (!needsScroll) {
             // If we don't already need to scroll, check if we will need to now
@@ -37,7 +37,7 @@ class Main extends React.Component {
     render() {
         return (
             <Container fluid>
-                <Streamer onClickHandler={this.props.streamerClickHandler} streamer={this.props.streamer}/>
+                <Header onClickHandler={this.props.streamerClickHandler} streamer={this.props.streamer}/>
                 <Row>
                     <Col lg={6} md={12} className="pr-0">
                         <small className="text-light">TOP CHAT</small>

@@ -1,0 +1,32 @@
+#streamer-data {
+  > img {
+    width: 50px;
+  }
+  &.connected {
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    > img  {
+      border: 3px solid green;
+      border-radius: 50px;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+@media screen and (max-width: 896px) {
+  #streamer-data {
+    > img {
+      width: 40px;
+    }
+  }
+}
+
+@media screen and (max-width: 414px) {
+  #streamer-data {
+    font-size: 75%;
+    > img {
+      width: 35px;
+    }
+  }
+}

@@ -20,7 +20,7 @@ class Emote extends React.Component {
                     placement="top"
                     overlay={
                         <Tooltip id={`tooltip-${new Date().valueOf()}`}>
-                            <div>
+                            <div className="emote-overlay-wrapper">
                                 <img
                                 src={this.getLargeEmoteUrl(this.props.emote.urls)}
                                 alt={this.props.emote.name}/>
