@@ -104,7 +104,7 @@ app.get("/api/streamers/:streamer", async (req, res) => {
 });
 
 /**
- * Get requested streamer data (display name & avatar)
+ * Check if given streamer is live
  */
 app.get("/api/streamers/:streamer/live", async (req, res) => {
     // Convert entered streamer name to lower case to prevent duplicate storages in cache

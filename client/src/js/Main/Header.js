@@ -27,7 +27,7 @@ class Header extends React.Component {
         return (
             <div className="d-flex" id="header">
                 <input className="form-control mr-4" id="streamer-input" onKeyPress={this.keyPressHandler.bind(this)} onChange={this.changeHandler.bind(this)} placeholder="Enter Streamer"/>
-                <button className="btn btn-primary p-1" id="enter-btn" onClick={this.clickHandler.bind(this)}>Enter Chat</button>
+                <button className="btn btn-primary p-1" id="enter-btn" onClick={this.clickHandler.bind(this)}>Join</button>
                 <Streamer data={this.props.streamer} isLive={this.props.isLive}/>
             </div>
         );
