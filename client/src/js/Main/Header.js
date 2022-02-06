@@ -1,6 +1,6 @@
 import React from "react";
 import './Header.scss';
-import Streamer from "./Streamer";
+import Streamer from "./Streamer/Streamer";
 
 class Header extends React.Component {
     constructor(props) {
@@ -28,7 +28,7 @@ class Header extends React.Component {
             <div className="d-flex" id="header">
                 <input className="form-control mr-4" id="streamer-input" onKeyPress={this.keyPressHandler.bind(this)} onChange={this.changeHandler.bind(this)} placeholder="Enter Streamer"/>
                 <button className="btn btn-primary p-1" id="enter-btn" onClick={this.clickHandler.bind(this)}>Enter Chat</button>
-                <Streamer data={this.props.streamer}/>
+                <Streamer data={this.props.streamer} isLive={this.props.isLive}/>
             </div>
         );
     }

@@ -1,12 +1,12 @@
 #streamer-data {
-  > img {
+  #streamer-avatar {
     width: 50px;
   }
   &.connected {
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    > img  {
+    #streamer-avatar  {
       border-radius: 50px;
       flex-wrap: wrap;
     }
@@ -15,7 +15,7 @@
 
 @media screen and (max-width: 896px) {
   #streamer-data {
-    > img {
+    #streamer-avatar {
       width: 40px;
     }
   }
@@ -24,7 +24,7 @@
 @media screen and (max-width: 414px) {
   #streamer-data {
     font-size: 75%;
-    > img {
+    #streamer-avatar {
       width: 35px;
     }
   }

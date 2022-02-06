@@ -1,6 +1,7 @@
 import React from "react";
 import './Streamer.scss';
 import {Spinner} from "react-bootstrap";
+import Avatar from "./Avatar";
 
 class Streamer extends React.Component {
 
@@ -16,10 +17,10 @@ class Streamer extends React.Component {
             </div>
         }
         if (this.props.data.isLoading) {
-            return <Spinner animation="border" variant="primary" />;
+            return <Spinner animation="border" variant="primary"/>;
         }
         return <div className="connected d-flex" id="streamer-data">
-            <img src={this.props.data.avatar} alt="Streamer Avatar"/>
+            <Avatar streamer={this.props.data.displayName}link={this.props.data.avatar} isLive={this.props.isLive}/>
             <span className="mx-1">{this.props.data.displayName}</span>
         </div>;
     }

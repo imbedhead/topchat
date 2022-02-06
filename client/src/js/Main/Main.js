@@ -37,7 +37,7 @@ class Main extends React.Component {
     render() {
         return (
             <Container fluid>
-                <Header onClickHandler={this.props.streamerClickHandler} streamer={this.props.streamer}/>
+                <Header onClickHandler={this.props.streamerClickHandler} streamer={this.props.streamer} isLive={this.props.isLive}/>
                 <Row>
                     <Col lg={6} md={12} className="pr-0">
                         <small className="text-light">TOP CHAT</small>

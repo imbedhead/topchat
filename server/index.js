@@ -37,6 +37,7 @@ async function getAuthToken() {
 
 getAuthToken();
 
+
 app.get("/api/emotes/:streamer", async (req, res) => {
     // Convert entered streamer name to lower case to prevent duplicate storages in cache
     const streamer = req.params.streamer.toLowerCase();
@@ -84,8 +85,8 @@ app.get("/api/streamers/:streamer", async (req, res) => {
 
     let data = {};
     if (!response.error) {
-        const responseData = response.data.data;
         try {
+            const responseData = response.data.data;
             data = {
                 displayName: responseData[0].display_name,
                 avatar: responseData[0].profile_image_url
@@ -95,6 +96,40 @@ app.get("/api/streamers/:streamer", async (req, res) => {
                 displayName: "No User Found",
                 invalid: true,
                 avatar: null
+            }
+        }
+    }
+
+    res.send(data);
+});
+
+/**
+ * Get requested streamer data (display name & avatar)
+ */
+app.get("/api/streamers/:streamer/live", async (req, res) => {
+    // Convert entered streamer name to lower case to prevent duplicate storages in cache
+    const streamer = req.params.streamer.toLowerCase();
+    if (AUTH_EXPIRED <= new Date()) {
+        await getAuthToken();
+    }
+
+    // Call the external API to retrieve all emotes
+    const response = await helix.get(`streams?user_login=${streamer}`, r => r.json()).catch(error => {
+        return {error: "Not Found"}
+    });
+
+    let data = {};
+    if (!response.error) {
+        try {
+            const responseData = response.data.data;
+            data = {
+                live: responseData.length > 0,
+                startTime : new Date(responseData[0].started_at)
+            }
+        } catch {
+            data = {
+                live: false,
+                startTime : -1
             }
         }
     }

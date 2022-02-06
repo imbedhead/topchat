@@ -21,6 +21,7 @@ const EMOTE_SIZE = [
         urlSnippet: "3.0"
     }
 ];
+let liveId = null;
 
 class App extends React.Component {
     constructor(props) {
@@ -89,8 +90,12 @@ class App extends React.Component {
             if (this.currentStreamer) {
                 ComfyJS.Disconnect();
             }
+            if (liveId) {
+                clearTimeout(liveId);
+                liveId = null;
+            }
             this.currentStreamer = streamer;
-            this.setState({streamer: {displayName: "", isLoading:true}});
+            this.setState({streamer: {displayName: "", isLoading: true, isLive: false}});
             const streamerData = await this.getStreamerData(streamer);
             this.setState({streamer: streamerData, topChats: []});
             if (this.state.streamer.invalid) {
@@ -98,9 +103,26 @@ class App extends React.Component {
                 this.clearEmbedUrl();
                 return;
             }
+            this.getLiveState();
             ComfyJS.Init(streamer);
             this.updateUrl(streamer)
             await this.getEmotes();
+        }
+    }
+
+
+    getLiveState() {
+        try {
+            fetch(`api/streamers/${this.currentStreamer}/live`).then(function (r) {
+                r.json().then(function (response) {
+                    this.setState({isLive: response.live});
+                    liveId = setTimeout(this.getLiveState.bind(this), 60000)
+                }.bind(this));
+            }.bind(this));
+        } catch {
+            if (liveId) {
+                clearTimeout(liveId);
+            }
         }
     }
 
@@ -291,7 +313,7 @@ class App extends React.Component {
         return (
             <div className="App bg-dark text-light">
                 <Main msgs={this.state.topChats} url={this.state.url} height={this.state.height}
-                      width={this.state.width}
+                      width={this.state.width} isLive={this.state.isLive}
                       streamerClickHandler={this.streamerClickHandler.bind(this)} streamer={this.state.streamer}/>
             </div>
         );
